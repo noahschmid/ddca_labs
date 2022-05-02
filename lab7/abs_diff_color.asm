@@ -42,7 +42,7 @@ abs_diff:
 	
 	move $v0, $t6		# store result in v0
 	lw $ra, 0($sp)		# restore return address
-	addi $sp, $sp, 24	# reset stack pointer as space is no longer needed
+	addi $sp, $sp, 28	# reset stack pointer as space is no longer needed
 	jr $ra			# exit function
 
 abs_diff_helper:		# we use abs_diff_helper as a subroutine that behaves just like the original abs_diff
