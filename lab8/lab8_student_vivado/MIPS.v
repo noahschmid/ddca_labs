@@ -128,16 +128,16 @@ module MIPS(
    
    ////////////////////////////////////
 	// Instantiate the Data Memory
-	  DataMemory i_dmem (ALUResult[7:2], ReadData);
+	  DataMemory i_dmem (CLK, ALUResult[7:2], MemWrite, WriteData, ReadData);
 
    // Memory Mapped I/O
    assign IsIO = (ALUResult[31:4] == 28'h00007ff) ? 1 : 0; // 1: when datamemory address
 	                                                  // falls into I/O  address range
    // TODO Part 1
-   assign IsMemWrite  =  ReadData[31:26] == 6'b101011;  // Is 1 when there is a SW instruction on DataMem address
+   assign IsMemWrite  =  (MemWrite & ~IsIO);  // Is 1 when there is a SW instruction on DataMem address
    assign IOWriteData =  WriteData;                     // This line is connected directly to WriteData
    assign IOAddr      =  ALUResult[3:0];                // The LSB 4 bits of the Address is assigned to IOAddr
-   assign IOWriteEn   =  ReadMemIO[31:26] == 6'b101011; // Is 1 when there is a SW instruction on IO address 
+   assign IOWriteEn   =  (MemWrite & IsIO); // Is 1 when there is a SW instruction on IO address 
    
 
    assign ReadMemIO   = IsIO ? IOReadData : ReadData;   // Mux selects memory or I/O	
